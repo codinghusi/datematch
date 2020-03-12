@@ -1,0 +1,57 @@
+
+html, body {
+    --color-picked: #32ff7e;
+    --color-disabled: #ffcccc;
+    --color-available: #FFFFFF;
+    --color-not-available: #ff4d4d;
+}
+
+
+#content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem;
+}
+
+.calendar .month-name {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.calendar .day-content {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+
+    background-color: var(--color-not-available);
+
+    cursor: not-allowed;
+}
+
+.calendar .day-content.selected {
+    background-color: var(--color-picked);
+}
+
+.calendar .day-content.disabled {
+    background-color: var(--color-disabled);
+    
+}
+
+.calendar .day-content.available {
+    background-color: var(--color-available);
+    cursor: pointer;
+}
