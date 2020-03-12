@@ -1,9 +1,9 @@
 
 html, body {
     --color-picked: #32ff7e;
-    --color-disabled: #ffcccc;
     --color-available: #FFFFFF;
     --color-not-available: #ff4d4d;
+    --color-other-month: #ffcccc;
 }
 
 
@@ -15,6 +15,7 @@ html, body {
     width: 100%;
 }
 
+
 .calendar {
     display: flex;
     flex-direction: column;
@@ -23,7 +24,18 @@ html, body {
     margin: 2rem;
 }
 
-.calendar .month-name {
+.calendar .calender-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.calendar .calender-header button {
+    cursor: pointer;
+}
+
+.calendar .calender-header .month-name {
     font-size: 1.4em;
     font-weight: bold;
 }
@@ -36,22 +48,39 @@ html, body {
     justify-content: center;
     align-items: center;
     border: 1px solid black;
+    cursor: pointer;
+    user-select: none;
+}
 
-    background-color: var(--color-not-available);
-
+.calendar .day-content:not(.available) {
     cursor: not-allowed;
-}
-
-.calendar .day-content.selected {
-    background-color: var(--color-picked);
-}
-
-.calendar .day-content.disabled {
-    background-color: var(--color-disabled);
-    
+    /* Credits: http://css3pie.com/demos/gradient-patterns/ */
+    background-color: var(--color-not-available);
+    background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%,
+                    transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%,
+                    transparent 75%, transparent);
+    background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%,
+                    transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%,
+                    transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .2) 25%, transparent 25%,
+                    transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%,
+                    transparent 75%, transparent);
 }
 
 .calendar .day-content.available {
+    --height: .2rem;
+    position: relative;
+    top: calc(-1 * var(--height));
+    box-shadow: 0 var(--height) .2rem gray;
     background-color: var(--color-available);
-    cursor: pointer;
+}
+
+.calendar .day-content.picked {
+    --height: .2rem;
+    background-color: var(--color-picked);
+    box-shadow: 0 var(--height) .2rem var(--color-picked);
+}
+
+.calendar .day-content.other-month {
+    background-color: var(--color-other-month);
 }
