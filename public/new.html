@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>DateMatch</title>
+        <meta charset="utf-8" />
+        <link href="/style.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div id="content">
+            <form name="form">
+                <h1>Erstelle eine neue Umfrage</h1>
+                Name: <input name="name" />
+                <h2>Welche Termine passen dir?</h2>
+                <div id="calendar"></div>
+                <button>Erstellen</button>
+            </form>
+            
+        </div>
+        <script src="/script.js"></script>
+        <script>
+        window.addEventListener('load' , () => {
+            const form = document.forms.form;
+            const name = form.name;
+            const calendarElement = document.getElementById('calendar');
+
+            const picker = new DatePicker(new Date());
+            calendarElement.appendChild(picker.element);
+            picker.render();
+
+            form.addEventListener('submit', async e => {
+                e.preventDefault();
+                const response = await fetch('/create', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name.value,
+                        available: picker.picked
+                    })
+                })
+            })
+        })
+        </script>
+    </body>
+</html>

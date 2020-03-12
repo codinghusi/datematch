@@ -8,16 +8,19 @@ class Calendar {
     }
 
     randomFlyIn(element) {
-        const offsetRange = 200;
+        const x = parseInt(element.dataset.x);
+        const y = parseInt(element.dataset.y);
+        const offsetRange = 400;
         const duration = Math.random() * 500;
-        const xOffset = Math.random() * offsetRange - offsetRange / 2;
-        const yOffset = Math.random() * offsetRange - offsetRange / 2;
+        const xOffset = Math.random() * (x - 3) / 3 * offsetRange / 4;
+        const yOffset = Math.random() * (y - 2.5) / 2.5 * offsetRange;
         Object.assign(element.style, {
             position: 'relative',
             left: `${xOffset}px`,
             top: `${yOffset}px`,
-            transition: `${duration}ms`,
-            transform: 'scale(1.2, 1.2)'
+            transition: `${duration}ms ease-out`,
+            transform: 'scale(2, 2)',
+            zIndex: duration
         });
         setTimeout(() => {
             Object.assign(element.style, {
@@ -27,15 +30,13 @@ class Calendar {
                 transition: `0`,
                 transform: 'scale(1, 1)'
             });
-        }, duration);
+        }, 1);
     }
 
     handleDayElement(element, date) {
         element.innerHTML = date.getDate();
         if (date.getMonth() != this.month.getMonth()) {
             element.classList.add('other-month');
-        } else {
-            this.randomFlyIn(element);
         }
     }
     
@@ -90,10 +91,10 @@ class Calendar {
         }</tr>`;
 
         // Rows / Weeks
-        const rows = weeks.map(week => {
-            const row = week.map(date => `
+        const rows = weeks.map((week, y) => {
+            const row = week.map((date, x) => `
                 <td data-date="${date}" class="day">
-                    <div class="day-content">
+                    <div class="day-content" data-x="${x}" data-y="${y}">
                     </div>
                 </td>`
             ).join('\n');
@@ -142,7 +143,7 @@ class Calendar {
 
 
 class DatePicker extends Calendar{
-    constructor(month, available, picked = {}) {
+    constructor(month, available = [], picked = []) {
         super(month);
         this.available = available;
         this.picked = picked;
@@ -159,23 +160,28 @@ class DatePicker extends Calendar{
             return;
         }
 
-        if (!this.available ||
+        if (!this.available.length ||
             this.available.map(this.standarizeDate)
                           .includes(this.standarizeDate(date))) {
             element.classList.add('available');
+            // this.randomFlyIn(element);
         }
-        if (this.picked[this.standarizeDate(date)]) {
+        if (this.picked.includes(this.standarizeDate(date))) {
             element.classList.add('picked');
         }
     }
     
     handleDayClick(element, date) {
         if (element.classList.contains('other-month')
-        ||  element.classList.contains('not-available')) {
+        ||  !element.classList.contains('available')) {
             return;
         }
         element.classList.toggle('picked');
-        this.picked[date] = element.classList.contains('picked');
+        if (element.classList.contains('picked')) {
+            this.picked.push(this.standarizeDate(date));
+        } else {
+            this.picked.splice(this.picked.indexOf(this.standarizeDate(date)), 1);
+        }
     }
 }
 
@@ -203,15 +209,3 @@ class DateResult extends Calendar{
         element.innerHTML = this.handleDayElement(element, date);
     }
 }
-
-window.addEventListener('load' , () => {
-    const calendarElement = document.getElementById('calendar');
-    const topicElement = document.getElementById('topic');
-
-    const picker = new DatePicker(new Date(), [new Date('3/10/2020')]);
-    // const picker = new DatePicker(new Date());
-    calendarElement.appendChild(picker.element);
-    picker.render();
-
-    topicElement.innerHTML = "Wann machen wir das jetzt?";
-})

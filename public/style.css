@@ -73,6 +73,7 @@ html, body {
     top: calc(-1 * var(--height));
     box-shadow: 0 var(--height) .2rem gray;
     background-color: var(--color-available);
+    font-weight: bold;
 }
 
 .calendar .day-content.picked {

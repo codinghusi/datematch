@@ -4,7 +4,7 @@
     <head>
         <title>DateMatch</title>
         <meta charset="utf-8" />
-        <link href="style.css" rel="stylesheet" />
+        <link href="/style.css" rel="stylesheet" />
     </head>
 
     <body>
@@ -12,6 +12,19 @@
             <h1 id="topic"></h1>
             <div id="calendar"></div>
         </div>
-        <script src="script.js"></script>
+        <script src="/script.js"></script>
+
+        <script>
+        window.addEventListener('load' , () => {
+            const calendarElement = document.getElementById('calendar');
+            const topicElement = document.getElementById('topic');
+
+            const picker = new DatePicker(new Date(), [new Date('3/10/2020')]);
+            calendarElement.appendChild(picker.element);
+            picker.render();
+
+            topicElement.innerHTML = "Wann machen wir das jetzt?";
+        })
+        </script>
     </body>
 </html>
